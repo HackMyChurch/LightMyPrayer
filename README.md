@@ -27,4 +27,15 @@ Le dispositif est constitué de :
 
 ## Photos
 
+![Light My Prayer](/Photos/LightMyPrayer1.jpg?raw=true)
+
+![Light My Prayer](/Photos/LightMyPrayer2.jpg?raw=true)
+
 La signalétique d'utilisation a été placée par dessus la structure en impression vinyle.
+
+![Light My Prayer](/Photos/LightMyPrayer3.jpg?raw=true)
+
+![Light My Prayer](/Photos/LightMyPrayer4.jpg?raw=true)
+
+![Light My Prayer](/Photos/LightMyPrayer5.jpg?raw=true)
+
