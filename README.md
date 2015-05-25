@@ -1,15 +1,15 @@
 # Light My Prayer (HackMyChurch)
 Projet « Light My Prayer »
 
-## Dispositif
 ---
+
+## Dispositif
+
 
 ## Fonctionnement
 
----
 
 ## Électronique
 
----
 
 ## Photos (iPad)
