@@ -1,2 +1,2 @@
-# HackMyChurch-LightMyPrayer
-Projet « Light My Prayer
+# Light My Prayer (HackMyChurch)
+Projet « Light My Prayer »
