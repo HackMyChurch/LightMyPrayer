@@ -25,4 +25,6 @@ Le dispositif est constitué de :
 
 ![Schema Arduino Zoom](/Arduino/Schema-Zoom.png?raw=true "Schema Arduino Zoom")
 
-## Photos (à venir)
+## Photos
+
+La signalétique d'utilisation a été placée par dessus la structure en impression vinyle.
