@@ -8,7 +8,7 @@
 // Schéma technique disponible sur GitHub
 // Kevin Vennitti (@kevinvennitti)
 
-// Les pin input sont définis ici,
+// Les pin output sont définis ici,
 // il est possible de les modifier
 // en adaptant le circuit électronique
 
