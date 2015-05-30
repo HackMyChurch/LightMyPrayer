@@ -14,7 +14,7 @@ Techniquement, l'utilisateur dessine des caractères avec son doigt sur la surfa
 Le dispositif est constitué de :
 * Un écran touch
 * Un ordinateur
-* Une carte Arduino et sa breadboard
+* Une carte Arduino, sa breadboard et son câble USB
 * Un Servo moteur
 * Un capteur de lumière
 * Un objet fabriqué sur mesure avec une trappe, un espace pour l'écran et un espace (inutilisé) pour la sortie d'une impression papier A5
