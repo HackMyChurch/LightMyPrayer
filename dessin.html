@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML5 paths example</title>
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+    <style type="text/css">
+        html {
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+        }
+        canvas, #debug {
+            border:1px #e1e1e1 solid;
+            box-shadow: 0px 0px 12px 2px #e1e1e1;
+            cursor: default !important;
+            float:left;
+        }
+        #debug {
+            margin-left:20px;
+            width: 200px;
+            height: 600px;
+            overflow: scroll;
+            color:gray;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="lead">Ecrivez avec votre doigt.</div>
+<canvas id="mycanvas" width="800" height="600">
+    Ce navigateur ne supporte pas les canvas HTML5. Essayez plutôt avec Chrome, Firefox, Safari, Opera ou Internet Explorer.
+</canvas>
+<div id="debug"></div>
+
+<script type="text/javascript">
+    var frameInterval = 1000/12; // in milliseconds
+    var mycanvas = document.getElementById("mycanvas");
+    var context = null;
+    var x,y = 0;
+    var x_prec, y_prec = 0;
+    var intervalID = null;
+
+    if(mycanvas && mycanvas.getContext) {
+        context = mycanvas.getContext("2d");
+        // background
+        context.fillStyle = "#F1F1F1";
+        context.fillRect(0,0,800,600);
+    }
+    context.strokeStyle = "GoldenRod";
+    context.lineWidth = 3.0;
+    context.lineCap = "round";
+    context.lineJoin = "round";
+
+    function onMouseMove(evt) {
+        if(context) {
+            context.beginPath();
+            context.moveTo(x,y);
+            x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
+            y = evt.offsetY ? evt.offsetY : (evt.pageY - evt.target.offsetTop);
+            context.lineTo(x,y);
+            context.stroke();
+            context.closePath();
+            document.getElementById("mycanvas").style.cursor = 'default !important';            
+        }
+    }
+    function onMouseUp(evt) {
+          mycanvas.removeEventListener("mousemove",onMouseMove,false);
+    }
+    mycanvas.onmousedown = function(evt) {
+        mycanvas.style.cursor = 'default';
+        if(evt.which == 3) return;
+        x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
+        y = evt.offsetY ? evt.offsetY : (evt.pageY - evt.target.offsetTop);
+        // do not register if right mouse button is pressed.
+        mycanvas.addEventListener("mousemove",onMouseMove,false);
+        mycanvas.addEventListener("mouseup",onMouseUp,false);
+    }
+
+
+    function recordFrame() {
+        if (x_prec != x || y_prec != y) {
+            document.getElementById("debug").insertAdjacentHTML('afterbegin', "x="+x+", y="+y+"<br/>");
+            x_prec = x;
+            y_prec = y;
+        }
+    }
+
+    // Recording generated frames as gif
+    intervalID = window.setInterval(recordFrame, frameInterval);
+
+</script>
+</div>
+</body>
+</html>
