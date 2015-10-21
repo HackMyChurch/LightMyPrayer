@@ -55,6 +55,12 @@
         <a class="btn" style="background-color:RebeccaPurple;" href="javascript:setColor('RebeccaPurple');">&nbsp;</a>
         <a class="btn" style="background-color:Black;" href="javascript:setColor('Black');">&nbsp;</a>
 
+        <select id="select_thickness" onChange="javascript:setThickness(this.value);">
+            <option value="3">Fin</option>
+            <option value="10">Moyen</option>
+            <option value="30">Epais</option>
+        </select>
+
         <a class="btn" href="javascript:resetMovie();">Recommencer</a>
         <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
     </div>
@@ -69,8 +75,8 @@
     var mycanvas = document.getElementById("mycanvas");
     var context = null;
     var x,y = 0;
-    var defaultLineWidth = 3.3;
-    var eraserLineWidth = 20;
+    var defaultLineWidth = 3;
+    var eraserLineWidth = 30;
     var intervalID = null;
     var movie = new Array();
     var movieIndex = -1;
@@ -104,7 +110,16 @@
 
     function setColor(color) {
         context.strokeStyle = color;
-        context.lineWidth = (color == "Black") ? eraserLineWidth : defaultLineWidth;
+        if (color == "Black") {
+           setThickness(eraserLineWidth);
+        } else {
+            setThickness(defaultLineWidth);
+        }
+    }
+
+    function setThickness(th) {
+        context.lineWidth = th;
+        document.getElementById("select_thickness").value = th;
     }
 
     function recordFrame() {
