@@ -53,6 +53,7 @@
         <a class="btn" style="background-color:MediumSeaGreen;" href="javascript:setColor('MediumSeaGreen');">&nbsp;</a>
         <a class="btn" style="background-color:OliveDrab;" href="javascript:setColor('OliveDrab');">&nbsp;</a>
         <a class="btn" style="background-color:RebeccaPurple;" href="javascript:setColor('RebeccaPurple');">&nbsp;</a>
+        <a class="btn" style="background-color:Black;" href="javascript:setColor('Black');">&nbsp;</a>
 
         <a class="btn" href="javascript:resetMovie();">Recommencer</a>
         <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
@@ -68,6 +69,8 @@
     var mycanvas = document.getElementById("mycanvas");
     var context = null;
     var x,y = 0;
+    var defaultLineWidth = 3.3;
+    var eraserLineWidth = 20;
     var intervalID = null;
     var movie = new Array();
     var movieIndex = -1;
@@ -83,7 +86,7 @@
             context.fillRect(0,0,800,600);
         }
         context.strokeStyle = "GoldenRod";
-        context.lineWidth = 3.3;
+        context.lineWidth = defaultLineWidth;
         context.lineCap = "round";
         context.lineJoin = "round";
     }
@@ -101,6 +104,7 @@
 
     function setColor(color) {
         context.strokeStyle = color;
+        context.lineWidth = (color == "Black") ? eraserLineWidth : defaultLineWidth;
     }
 
     function recordFrame() {
