@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTML5 paths example</title>
-
-    <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css" />
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
+    <title>Light My Prayer</title>
     <style type="text/css">
         html {
             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
@@ -23,6 +20,7 @@
             color:gray;
         }
     </style>
+
 </head>
 <body>
 <div class="container">
@@ -31,9 +29,10 @@
     Ce navigateur ne supporte pas les canvas HTML5. Essayez plutôt avec Chrome, Firefox, Safari, Opera ou Internet Explorer.
 </canvas>
 <div id="debug"></div>
+<img id="image_preview" src="" width="80" height="60" />
 
 <script type="text/javascript">
-    var frameInterval = 1000/12; // in milliseconds
+    var frameInterval = 40; // in milliseconds (25 frames/seconds)
     var mycanvas = document.getElementById("mycanvas");
     var context = null;
     var x,y = 0;
@@ -43,13 +42,54 @@
     if(mycanvas && mycanvas.getContext) {
         context = mycanvas.getContext("2d");
         // background
-        context.fillStyle = "#F1F1F1";
+        context.fillStyle = 'rgb(255,255,255)'; //"#F1F1F1";
         context.fillRect(0,0,800,600);
     }
     context.strokeStyle = "GoldenRod";
-    context.lineWidth = 3.0;
+    context.lineWidth = 3.3;
     context.lineCap = "round";
     context.lineJoin = "round";
+
+    function generateImage() {
+        // var image = new Image();
+        // var ctx = mycanvas.getContext("2d");
+        // ctx.drawImage(image, 0, 0);
+        
+        // var maxW = 100;
+        // var maxH = 100;
+        // var width = image.width;
+        // var height = image.height;
+
+        // if (width > height) {
+        //   if (width > maxW) {
+        //     height *= maxW / width;
+        //     width = maxW;
+        //   }
+        // } else {
+        //   if (height > maxH) {
+        //     width *= maxH / height;
+        //     height = maxH;
+        //   }
+        // }
+        // // mycanvas.width = width;
+        // // mycanvas.height = height;
+        // // var ctx = mycanvas.getContext("2d");
+        // ctx.drawImage(image, 0, 0, width, height);
+
+        var dataurl = mycanvas.toDataURL("image/gif");
+        console.log(dataurl);
+        // document.getElementById("image_preview").attr("src", dataurl);  
+   
+    }
+
+    function recordFrame() {
+        if (x_prec != x || y_prec != y) {
+            x_prec = x;
+            y_prec = y;
+            document.getElementById("debug").insertAdjacentHTML('afterbegin', "x="+x+", y="+y+"<br/>");
+            generateImage();
+        }
+    }
 
     function onMouseMove(evt) {
         if(context) {
@@ -66,6 +106,8 @@
     function onMouseUp(evt) {
           mycanvas.removeEventListener("mousemove",onMouseMove,false);
     }
+
+
     mycanvas.onmousedown = function(evt) {
         mycanvas.style.cursor = 'default';
         if(evt.which == 3) return;
@@ -74,15 +116,6 @@
         // do not register if right mouse button is pressed.
         mycanvas.addEventListener("mousemove",onMouseMove,false);
         mycanvas.addEventListener("mouseup",onMouseUp,false);
-    }
-
-
-    function recordFrame() {
-        if (x_prec != x || y_prec != y) {
-            document.getElementById("debug").insertAdjacentHTML('afterbegin', "x="+x+", y="+y+"<br/>");
-            x_prec = x;
-            y_prec = y;
-        }
     }
 
     // Recording generated frames as gif
