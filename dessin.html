@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <title>Light My Prayer</title>
     <style type="text/css">
         html {
             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
         }
-        canvas, #debug {
+        pre {
+            font-size:8px;
+        }
+        .lead{
+            margin: 10px 0px 10px 0px;
+        }
+        canvas, #debug{
             border:1px #e1e1e1 solid;
             box-shadow: 0px 0px 12px 2px #e1e1e1;
             cursor: default !important;
@@ -14,81 +21,107 @@
         }
         #debug {
             margin-left:20px;
-            width: 200px;
+            /*width: 250px;*/
             height: 600px;
             overflow: scroll;
             color:gray;
+        }
+
+        .btn {
+            border:1px #e1e1e1 solid;
+            box-shadow: 0px 0px 2px 2px #e1e1e1;
+            margin-left: 10px;
+            padding: 5px 10px 0px 10px;
+            text-decoration: none;
         }
     </style>
 
 </head>
 <body>
 <div class="container">
-    <div class="lead">Ecrivez avec votre doigt.</div>
+    <div class="lead">
+        <a class="btn" style="background-color:white;" href="javascript:setColor('white');">&nbsp;</a>
+        <a class="btn" style="background-color:GoldenRod;" href="javascript:setColor('GoldenRod');">&nbsp;</a>
+        <a class="btn" style="background-color:Aquamarine;" href="javascript:setColor('Aquamarine');">&nbsp;</a>
+        <a class="btn" style="background-color:Coral;" href="javascript:setColor('Coral');">&nbsp;</a>
+        <a class="btn" style="background-color:DarkOliveGreen;" href="javascript:setColor('DarkOliveGreen');">&nbsp;</a>
+        <a class="btn" style="background-color:DarkOrange;" href="javascript:setColor('DarkOrange');">&nbsp;</a>
+        <a class="btn" style="background-color:FireBrick;" href="javascript:setColor('FireBrick');">&nbsp;</a>
+        <a class="btn" style="background-color:HotPink;" href="javascript:setColor('HotPink');">&nbsp;</a>
+        <a class="btn" style="background-color:GreenYellow;" href="javascript:setColor('GreenYellow');">&nbsp;</a>
+        <a class="btn" style="background-color:LightSkyBlue;" href="javascript:setColor('LightSkyBlue');">&nbsp;</a>
+        <a class="btn" style="background-color:MediumSeaGreen;" href="javascript:setColor('MediumSeaGreen');">&nbsp;</a>
+        <a class="btn" style="background-color:OliveDrab;" href="javascript:setColor('OliveDrab');">&nbsp;</a>
+        <a class="btn" style="background-color:RebeccaPurple;" href="javascript:setColor('RebeccaPurple');">&nbsp;</a>
+
+        <a class="btn" href="javascript:resetMovie();">Recommencer</a>
+        <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
+    </div>
 <canvas id="mycanvas" width="800" height="600">
     Ce navigateur ne supporte pas les canvas HTML5. Essayez plutôt avec Chrome, Firefox, Safari, Opera ou Internet Explorer.
 </canvas>
 <div id="debug"></div>
-<img id="image_preview" src="" width="80" height="60" />
 
 <script type="text/javascript">
+    var debug_mode = true;
     var frameInterval = 40; // in milliseconds (25 frames/seconds)
     var mycanvas = document.getElementById("mycanvas");
     var context = null;
     var x,y = 0;
-    var x_prec, y_prec = 0;
     var intervalID = null;
+    var movie = new Array();
+    var movieIndex = -1;
+    var durationFactor = 1;
+    var firstDotOnCanvas = true;
+    var dataurl_prec = null;
 
-    if(mycanvas && mycanvas.getContext) {
-        context = mycanvas.getContext("2d");
-        // background
-        context.fillStyle = 'rgb(255,255,255)'; //"#F1F1F1";
-        context.fillRect(0,0,800,600);
+    function initCanvas(){ 
+        if(mycanvas && mycanvas.getContext) {
+            context = mycanvas.getContext("2d");
+            // background
+            context.fillStyle = 'rgb(0,0,0)';
+            context.fillRect(0,0,800,600);
+        }
+        context.strokeStyle = "GoldenRod";
+        context.lineWidth = 3.3;
+        context.lineCap = "round";
+        context.lineJoin = "round";
     }
-    context.strokeStyle = "GoldenRod";
-    context.lineWidth = 3.3;
-    context.lineCap = "round";
-    context.lineJoin = "round";
 
-    function generateImage() {
-        // var image = new Image();
-        // var ctx = mycanvas.getContext("2d");
-        // ctx.drawImage(image, 0, 0);
-        
-        // var maxW = 100;
-        // var maxH = 100;
-        // var width = image.width;
-        // var height = image.height;
+    function log(s, m) {
+        if (debug_mode) {
+            m = (m == undefined) ? 'afterBegin' : m;
+            document.getElementById("debug").insertAdjacentHTML(m, s + "<br/>");
+        }
+    }
 
-        // if (width > height) {
-        //   if (width > maxW) {
-        //     height *= maxW / width;
-        //     width = maxW;
-        //   }
-        // } else {
-        //   if (height > maxH) {
-        //     width *= maxH / height;
-        //     height = maxH;
-        //   }
-        // }
-        // // mycanvas.width = width;
-        // // mycanvas.height = height;
-        // // var ctx = mycanvas.getContext("2d");
-        // ctx.drawImage(image, 0, 0, width, height);
+    function clearLog(){
+        document.getElementById("debug").innerHTML = "";
+    }
 
-        var dataurl = mycanvas.toDataURL("image/gif");
-        console.log(dataurl);
-        // document.getElementById("image_preview").attr("src", dataurl);  
-   
+    function setColor(color) {
+        context.strokeStyle = color;
     }
 
     function recordFrame() {
-        if (x_prec != x || y_prec != y) {
-            x_prec = x;
-            y_prec = y;
-            document.getElementById("debug").insertAdjacentHTML('afterbegin', "x="+x+", y="+y+"<br/>");
-            generateImage();
-        }
+            var dataurl = mycanvas.toDataURL("image/gif");
+            var frame = {
+                'image' : null,
+                'duration' : frameInterval
+            };
+
+            if (dataurl_prec != dataurl) {
+                movieIndex++;
+                durationFactor = 1;
+                dataurl_prec = dataurl;
+                log('new frame #'+movieIndex);
+            } else {
+                durationFactor++;
+                log('same frame, duration='+eval(durationFactor * frameInterval));
+            }
+            frame.image = dataurl;
+            frame.duration = durationFactor * frameInterval;
+            movie[movieIndex] = frame;
     }
 
     function onMouseMove(evt) {
@@ -107,8 +140,42 @@
           mycanvas.removeEventListener("mousemove",onMouseMove,false);
     }
 
+    function sendMovie() {
+        window.clearInterval(intervalID);
+        firstDotOnCanvas = true;
+        clearLog();
+        log( movie.length + " frames générées<br><ul>", 'beforeEnd');
+        for (var i=0; i<movie.length;i++) {
+            if (movie[i]) {
+                log("<li>frame #" + i + ", duration="+ movie[i].duration+", ", 'beforeEnd');
+                log("<img src='" + movie[i].image + "' width='200' />", 'beforeEnd');
+            }
+        }
+        log("</ul>", 'beforeEnd');
+    }
 
+    function resetMovie(){
+        movie = new Array();
+        movieIndex = 0;
+        durationFactor = 1;
+        window.clearInterval(intervalID);
+        firstDotOnCanvas = true;
+        dataurl_prec = null;
+        initCanvas();
+        clearLog();
+    }
+
+
+    //
+    // Launch app !
+    //
+    initCanvas();
     mycanvas.onmousedown = function(evt) {
+        if (firstDotOnCanvas) {
+            // Start recording generated frames
+            intervalID = window.setInterval(recordFrame, frameInterval);
+            firstDotOnCanvas = false;
+        }
         mycanvas.style.cursor = 'default';
         if(evt.which == 3) return;
         x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
@@ -118,8 +185,6 @@
         mycanvas.addEventListener("mouseup",onMouseUp,false);
     }
 
-    // Recording generated frames as gif
-    intervalID = window.setInterval(recordFrame, frameInterval);
 
 </script>
 </div>
