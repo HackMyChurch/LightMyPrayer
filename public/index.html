@@ -118,10 +118,10 @@
                 movieIndex++;
                 durationFactor = 1;
                 dataurl_prec = dataurl;
-                log('new frame #'+movieIndex);
+                // log('new frame #'+movieIndex);
             } else {
                 durationFactor++;
-                log('same frame, duration='+eval(durationFactor * frameInterval));
+                // log('same frame, duration='+eval(durationFactor * frameInterval));
             }
             frame.image = dataurl;
             frame.duration = durationFactor * frameInterval;
