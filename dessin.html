@@ -141,17 +141,19 @@
     }
 
     function sendMovie() {
+        var totalDuration = 0;
         window.clearInterval(intervalID);
         firstDotOnCanvas = true;
         clearLog();
-        log( movie.length + " frames générées<br><ul>", 'beforeEnd');
         for (var i=0; i<movie.length;i++) {
             if (movie[i]) {
-                log("<li>frame #" + i + ", duration="+ movie[i].duration+", ", 'beforeEnd');
+                totalDuration+=movie[i].duration;
+                log("frame #" + i + ", duration="+ movie[i].duration+", ", 'beforeEnd');
                 log("<img src='" + movie[i].image + "' width='200' />", 'beforeEnd');
             }
         }
-        log("</ul>", 'beforeEnd');
+        log("Durée totale : "+eval(totalDuration/1000)+" sec.");
+        log( movie.length + " frames générées.");
     }
 
     function resetMovie(){
