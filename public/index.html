@@ -40,27 +40,6 @@
 <body>
 <div class="container">
     <div class="lead">
-        <a class="btn" style="background-color:white;" href="javascript:setColor('white');">&nbsp;</a>
-        <a class="btn" style="background-color:GoldenRod;" href="javascript:setColor('GoldenRod');">&nbsp;</a>
-        <a class="btn" style="background-color:Aquamarine;" href="javascript:setColor('Aquamarine');">&nbsp;</a>
-        <a class="btn" style="background-color:Coral;" href="javascript:setColor('Coral');">&nbsp;</a>
-        <a class="btn" style="background-color:DarkOliveGreen;" href="javascript:setColor('DarkOliveGreen');">&nbsp;</a>
-        <a class="btn" style="background-color:DarkOrange;" href="javascript:setColor('DarkOrange');">&nbsp;</a>
-        <a class="btn" style="background-color:FireBrick;" href="javascript:setColor('FireBrick');">&nbsp;</a>
-        <a class="btn" style="background-color:HotPink;" href="javascript:setColor('HotPink');">&nbsp;</a>
-        <a class="btn" style="background-color:GreenYellow;" href="javascript:setColor('GreenYellow');">&nbsp;</a>
-        <a class="btn" style="background-color:LightSkyBlue;" href="javascript:setColor('LightSkyBlue');">&nbsp;</a>
-        <a class="btn" style="background-color:MediumSeaGreen;" href="javascript:setColor('MediumSeaGreen');">&nbsp;</a>
-        <a class="btn" style="background-color:OliveDrab;" href="javascript:setColor('OliveDrab');">&nbsp;</a>
-        <a class="btn" style="background-color:RebeccaPurple;" href="javascript:setColor('RebeccaPurple');">&nbsp;</a>
-        <a class="btn" style="background-color:Black;" href="javascript:setColor('Black');">&nbsp;</a>
-
-        <select id="select_thickness" onChange="javascript:setThickness(this.value);">
-            <option value="3">Fin</option>
-            <option value="10">Moyen</option>
-            <option value="30">Epais</option>
-        </select>
-
         <a class="btn" href="javascript:resetMovie();">Recommencer</a>
         <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
     </div>
@@ -71,11 +50,11 @@
 
 <script type="text/javascript">
     var debug_mode = true;
-    var frameInterval = 40; // in milliseconds (25 frames/seconds)
+    var frameInterval = 67; // 40 milliseconds for 25 frames/sec
     var mycanvas = document.getElementById("mycanvas");
     var context = null;
     var x,y = 0;
-    var defaultLineWidth = 3;
+    var defaultLineWidth = 10;
     var eraserLineWidth = 30;
     var intervalID = null;
     var movie = new Array();
@@ -91,7 +70,7 @@
             context.fillStyle = 'rgb(0,0,0)';
             context.fillRect(0,0,800,600);
         }
-        context.strokeStyle = "GoldenRod";
+        context.strokeStyle = "white";
         context.lineWidth = defaultLineWidth;
         context.lineCap = "round";
         context.lineJoin = "round";
@@ -106,20 +85,6 @@
 
     function clearLog(){
         document.getElementById("debug").innerHTML = "";
-    }
-
-    function setColor(color) {
-        context.strokeStyle = color;
-        if (color == "Black") {
-           setThickness(eraserLineWidth);
-        } else {
-            setThickness(defaultLineWidth);
-        }
-    }
-
-    function setThickness(th) {
-        context.lineWidth = th;
-        document.getElementById("select_thickness").value = th;
     }
 
     function recordFrame() {
