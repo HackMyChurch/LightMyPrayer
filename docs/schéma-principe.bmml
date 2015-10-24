@@ -1,0 +1,214 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1292" measuredH="674" mockupW="1210" mockupH="634">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::RoundButton" x="234" y="490" w="173" h="111" measuredW="32" measuredH="32" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <shape>parallelogram</shape>
+        <text>Ecran%20tactile%0AAll-in-one</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::RoundButton" x="280" y="609" w="54" h="34" measuredW="32" measuredH="32" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <shape>rectangle</shape>
+        <size>10</size>
+        <text>Arduino</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="__group__" x="340" y="606" w="189" h="43" measuredW="189" measuredH="43" zOrder="8" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::CallOut" x="0" y="0" w="36" h="43" measuredW="35" measuredH="39" zOrder="0" locked="false" isInGroup="14">
+          <controlProperties>
+            <text>2</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="42" y="11" w="-1" h="-1" measuredW="147" measuredH="21" zOrder="1" locked="false" isInGroup="14">
+          <controlProperties>
+            <text>D%E9tection%20chute%20du%20galet</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="15" controlTypeID="__group__" x="167" y="449" w="168" h="43" measuredW="168" measuredH="43" zOrder="9" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::CallOut" x="0" y="0" w="36" h="43" measuredW="33" measuredH="39" zOrder="0" locked="false" isInGroup="15">
+          <controlProperties/>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="42" y="11" w="-1" h="-1" measuredW="126" measuredH="21" zOrder="1" locked="false" isInGroup="15">
+          <controlProperties>
+            <text>Ecriture%20de%20l%27intention</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="16" controlTypeID="__group__" x="480" y="197" w="36" h="43" measuredW="36" measuredH="43" zOrder="10" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::CallOut" x="0" y="0" w="36" h="43" measuredW="34" measuredH="39" zOrder="0" locked="false" isInGroup="16">
+          <controlProperties>
+            <text>5</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::RoundButton" x="195" y="170" w="173" h="111" measuredW="32" measuredH="32" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <shape>parallelogram</shape>
+        <size>11</size>
+        <text>Back-office%20de%20mod%E9ration%0A%28PC%2C%20tablette%2C%20smartphone%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="21" controlTypeID="__group__" x="658" y="223" w="153" h="185" measuredW="153" measuredH="185" zOrder="12" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="153" h="185" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="21"/>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Paragraph" x="11" y="6" w="135" h="179" measuredW="275" measuredH="80" zOrder="1" locked="false" isInGroup="21">
+          <controlProperties>
+            <text>Serveur%0A-%20Retravail%20des%20images%0A-%20Constitution%20des%20films%0A-%20Diffusion</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Arrow" x="349" y="241" w="309" h="47" measuredW="150" measuredH="100" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Suppression%20/%20Validation%20a%20post%E9riori</text>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Arrow" x="407" y="330" w="251" h="155" measuredW="150" measuredH="100" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>bottom</direction>
+        <leftArrow>false</leftArrow>
+        <text>Envoi%20des%20images</text>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="__group__" x="379" y="418" w="36" h="43" measuredW="36" measuredH="43" zOrder="15" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::CallOut" x="0" y="0" w="36" h="43" measuredW="34" measuredH="39" zOrder="0" locked="false" isInGroup="24">
+          <controlProperties>
+            <text>3</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::Arrow" x="811" y="315" w="182" h="10" measuredW="150" measuredH="100" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>bottom</direction>
+        <leftArrow>false</leftArrow>
+        <text>Diffusion</text>
+      </controlProperties>
+    </control>
+    <control controlID="26" controlTypeID="__group__" x="826" y="260" w="36" h="43" measuredW="36" measuredH="43" zOrder="17" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::CallOut" x="0" y="0" w="36" h="43" measuredW="35" measuredH="39" zOrder="0" locked="false" isInGroup="26">
+          <controlProperties>
+            <text>4</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Image" x="993" y="189" w="254" h="261" measuredW="1600" measuredH="1200" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./mockup-projection.jpg</src>
+      </controlProperties>
+    </control>
+    <control controlID="37" controlTypeID="__group__" x="213" y="503" w="173" h="153" measuredW="173" measuredH="153" zOrder="5" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::RoundButton" x="0" y="0" w="173" h="111" measuredW="32" measuredH="32" zOrder="0" locked="false" isInGroup="37">
+          <controlProperties>
+            <shape>parallelogram</shape>
+            <text>Ecran%20tactile%0AAll-in-one</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::RoundButton" x="46" y="119" w="54" h="34" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="37">
+          <controlProperties>
+            <shape>rectangle</shape>
+            <size>10</size>
+            <text>Arduino</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="38" controlTypeID="__group__" x="193" y="517" w="173" h="153" measuredW="173" measuredH="153" zOrder="4" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::RoundButton" x="0" y="0" w="173" h="111" measuredW="32" measuredH="32" zOrder="0" locked="false" isInGroup="38">
+          <controlProperties>
+            <shape>parallelogram</shape>
+            <text>Ecran%20tactile%0AAll-in-one</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::RoundButton" x="46" y="119" w="54" h="34" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="38">
+          <controlProperties>
+            <shape>rectangle</shape>
+            <size>10</size>
+            <text>Arduino</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::StickyNote" x="686" y="54" w="277" h="154" measuredW="109" measuredH="123" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>El%E9ments%20de%20dimensionnement%20du%20serveur%0A%20-%20traitement%20d%27assemblage%20des%20images%0A%20-%20Mapping%20et%20diffusion%0A%20-%20serveur%20web%20%283%20clients%20+%201%20mod%E9rateur%29.%0A%20-%20wifi</text>
+      </controlProperties>
+    </control>
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::StickyNote" x="535" y="517" w="236" h="152" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>El%E9ments%20de%20dimensionnement%20du%20client%0A%20-%20g%E9n%E9ration%20d%27images%20avec%20un%20frameRate%20important%0A%20-%20wifi%0A%20-%204Go%20de%20Ram%20mini.</text>
+      </controlProperties>
+    </control>
+    <control controlID="44" controlTypeID="__group__" x="536" y="40" w="136" h="91" measuredW="136" measuredH="91" zOrder="21" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="__group__" x="0" y="37" w="136" h="54" measuredW="136" measuredH="54" zOrder="0" locked="false" isInGroup="44">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="16" y="0" w="106" h="54" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="0"/>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Paragraph" x="0" y="23" w="136" h="17" measuredW="275" measuredH="80" zOrder="1" locked="false" isInGroup="0">
+              <controlProperties>
+                <align>center</align>
+                <text>Routeur%20Wifi</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Arrow" x="115" y="1" w="10" h="90" measuredW="150" measuredH="100" zOrder="1" locked="false" isInGroup="44">
+          <controlProperties>
+            <direction>bottom</direction>
+            <leftArrow>false</leftArrow>
+            <rightArrow>false</rightArrow>
+            <text/>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Arrow" x="13" y="0" w="10" h="90" measuredW="150" measuredH="100" zOrder="2" locked="false" isInGroup="44">
+          <controlProperties>
+            <direction>bottom</direction>
+            <leftArrow>false</leftArrow>
+            <rightArrow>false</rightArrow>
+            <text/>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::RoundButton" x="82" y="629" w="544" h="45" measuredW="32" measuredH="32" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15374745</borderColor>
+        <color>16777215</color>
+        <shape>dottedRect</shape>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::RoundButton" x="82" y="145" w="544" h="449" measuredW="32" measuredH="32" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15374745</borderColor>
+        <color>16777215</color>
+        <shape>dottedRect</shape>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::RoundButton" x="642" y="145" w="291" h="449" measuredW="32" measuredH="32" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15374745</borderColor>
+        <color>16777215</color>
+        <shape>dottedRect</shape>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::RoundButton" x="962" y="145" w="330" h="449" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15374745</borderColor>
+        <color>16777215</color>
+        <shape>dottedRect</shape>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
