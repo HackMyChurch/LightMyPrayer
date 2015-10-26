@@ -1,0 +1,198 @@
+    <style type="text/css">
+        html {
+            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+        }
+        pre {
+            font-size:8px;
+        }
+        .lead{
+            margin: 10px 0px 10px 0px;
+        }
+        canvas, #debug{
+            border:1px #e1e1e1 solid;
+            box-shadow: 0px 0px 12px 2px #e1e1e1;
+            cursor: default !important;
+            float:left;
+        }
+        #debug {
+            margin-left:20px;
+            /*width: 250px;*/
+            height: 600px;
+            overflow: scroll;
+            color:gray;
+        }
+
+        .btn {
+            border:1px #e1e1e1 solid;
+            box-shadow: 0px 0px 2px 2px #e1e1e1;
+            margin-left: 10px;
+            padding: 5px 10px 0px 10px;
+            text-decoration: none;
+        }
+    </style>
+
+
+<div class="container">
+    <div class="lead">
+        <a class="btn" href="javascript:resetMovie();">Recommencer</a>
+        <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
+    </div>
+<canvas id="mycanvas" width="800" height="600">
+    Ce navigateur ne supporte pas les canvas HTML5. Essayez plutôt avec Chrome, Firefox, Safari, Opera ou Internet Explorer.
+</canvas>
+<div id="debug"></div>
+
+<script type="text/javascript">
+    var debug_mode = true;
+    var frameInterval = 67; // 40 milliseconds for 25 frames/sec
+    var mycanvas = document.getElementById("mycanvas");
+    var context = null;
+    var x,y = 0;
+    var defaultLineWidth = 10;
+    var eraserLineWidth = 30;
+    var intervalID = null;
+    var movie = new Array();
+    var movieIndex = -1;
+    var durationFactor = 1;
+    var firstDotOnCanvas = true;
+    var dataurl_prec = null;
+
+    function initCanvas(){ 
+        if(mycanvas && mycanvas.getContext) {
+            context = mycanvas.getContext("2d");
+            // background
+            context.fillStyle = 'rgb(0,0,0)';
+            context.fillRect(0,0,800,600);
+        }
+        context.strokeStyle = "white";
+        context.lineWidth = defaultLineWidth;
+        context.lineCap = "round";
+        context.lineJoin = "round";
+    }
+
+    function log(s, m) {
+        if (debug_mode) {
+            m = (m == undefined) ? 'afterBegin' : m;
+            document.getElementById("debug").insertAdjacentHTML(m, s + "<br/>");
+        }
+    }
+
+    function clearLog(){
+        document.getElementById("debug").innerHTML = "";
+    }
+
+    function recordFrame() {
+            var dataurl = mycanvas.toDataURL("image/png");
+            var frame = {
+                'image' : null,
+                'duration' : frameInterval
+            };
+
+            if (dataurl_prec != dataurl) {
+                movieIndex++;
+                durationFactor = 1;
+                dataurl_prec = dataurl;
+                // log('new frame #'+movieIndex);
+            } else {
+                durationFactor++;
+                // log('same frame, duration='+eval(durationFactor * frameInterval));
+            }
+            frame.image = dataurl;
+            frame.duration = durationFactor * frameInterval;
+            movie[movieIndex] = frame;
+    }
+
+    function onMouseMove(evt) {
+        if(context) {
+            context.beginPath();
+            context.moveTo(x,y);
+            x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
+            y = evt.offsetY ? evt.offsetY : (evt.pageY - evt.target.offsetTop);
+            context.lineTo(x,y);
+            context.stroke();
+            context.closePath();
+            document.getElementById("mycanvas").style.cursor = 'default !important';            
+        }
+    }
+    function onMouseUp(evt) {
+          mycanvas.removeEventListener("mousemove",onMouseMove,false);
+    }
+
+    function sendMovie() {
+        var totalDuration = 0;
+        window.clearInterval(intervalID);
+        firstDotOnCanvas = true;
+        clearLog();
+        for (var i=0; i<movie.length;i++) {
+            if (movie[i]) {
+                totalDuration+=movie[i].duration;
+                log("frame #" + i + ", duration="+ movie[i].duration+", ", 'beforeEnd');
+                log("<img src='" + movie[i].image + "' width='200' />", 'beforeEnd');
+                // log("<img src='" + convertToGrayScale(movie[i].image) + "' width='200' />", 'beforeEnd');
+            }
+        }
+        log("Durée totale : "+eval(totalDuration/1000)+" sec.");
+        log( movie.length + " frames générées.");
+    }
+
+    function resetMovie(){
+        movie = new Array();
+        movieIndex = 0;
+        durationFactor = 1;
+        window.clearInterval(intervalID);
+        firstDotOnCanvas = true;
+        dataurl_prec = null;
+        initCanvas();
+        clearLog();
+    }
+
+    // function convertToGrayScale(img) {
+    //     console.log(img);
+    //     console.log(img.src);
+    //     // img.src = context.getImageData( 0, 0, mycanvas.width, mycanvas.height );
+    //     var workingCanvas = document.createElement( 'canvas' );
+    //     var workingContext = workingCanvas.getContext( '2d' );
+
+    //     workingContext.drawImage( img, 0, 0 );
+    //     var pixels = workingContext.getImageData( 0, 0, mycanvas.width, mycanvas.height );
+    //     for( var y = 0; y < pixels.height; y++ ) {
+    //         for( var x = 0; x < pixels.width; x++ ) {
+    //             var i = ( y * 4 ) * pixels.width + x * 4;
+    //             var avg = ( 
+    //                 pixels.data[i] 
+    //               + pixels.data[i + 1] 
+    //               + pixels.data[i + 2] 
+    //             ) / 3;
+    //             pixels.data[i] = avg;
+    //             pixels.data[i + 1] = avg;
+    //             pixels.data[i + 2] = avg;
+    //         };
+    //     };
+    //     console.log(pixels);
+    //     workingContext.putImageData( pixels, 0, 0, 0, 0, pixels.width, pixels.height );
+    //     console.log(workingCanvas.toDataURL());
+    //     return workingCanvas.toDataURL();
+    // }
+
+    //
+    // Launch app !
+    //
+    initCanvas();
+    mycanvas.onmousedown = function(evt) {
+        if (firstDotOnCanvas) {
+            // Start recording generated frames
+            intervalID = window.setInterval(recordFrame, frameInterval);
+            firstDotOnCanvas = false;
+        }
+        mycanvas.style.cursor = 'default';
+        if(evt.which == 3) return;
+        x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
+        y = evt.offsetY ? evt.offsetY : (evt.pageY - evt.target.offsetTop);
+        // do not register if right mouse button is pressed.
+        mycanvas.addEventListener("mousemove",onMouseMove,false);
+        mycanvas.addEventListener("mouseup",onMouseUp,false);
+    }
+
+
+</script>
+</div>
