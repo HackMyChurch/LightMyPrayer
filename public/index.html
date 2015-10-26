@@ -88,7 +88,7 @@
     }
 
     function recordFrame() {
-            var dataurl = mycanvas.toDataURL("image/gif");
+            var dataurl = mycanvas.toDataURL("image/png");
             var frame = {
                 'image' : null,
                 'duration' : frameInterval
@@ -134,6 +134,7 @@
                 totalDuration+=movie[i].duration;
                 log("frame #" + i + ", duration="+ movie[i].duration+", ", 'beforeEnd');
                 log("<img src='" + movie[i].image + "' width='200' />", 'beforeEnd');
+                // log("<img src='" + convertToGrayScale(movie[i].image) + "' width='200' />", 'beforeEnd');
             }
         }
         log("Durée totale : "+eval(totalDuration/1000)+" sec.");
@@ -151,6 +152,33 @@
         clearLog();
     }
 
+    function convertToGrayScale(img) {
+        console.log(img);
+        console.log(img.src);
+        // img.src = context.getImageData( 0, 0, mycanvas.width, mycanvas.height );
+        var workingCanvas = document.createElement( 'canvas' );
+        var workingContext = workingCanvas.getContext( '2d' );
+
+        workingContext.drawImage( img, 0, 0 );
+        var pixels = workingContext.getImageData( 0, 0, mycanvas.width, mycanvas.height );
+        for( var y = 0; y < pixels.height; y++ ) {
+            for( var x = 0; x < pixels.width; x++ ) {
+                var i = ( y * 4 ) * pixels.width + x * 4;
+                var avg = ( 
+                    pixels.data[i] 
+                  + pixels.data[i + 1] 
+                  + pixels.data[i + 2] 
+                ) / 3;
+                pixels.data[i] = avg;
+                pixels.data[i + 1] = avg;
+                pixels.data[i + 2] = avg;
+            };
+        };
+        console.log(pixels);
+        workingContext.putImageData( pixels, 0, 0, 0, 0, pixels.width, pixels.height );
+        console.log(workingCanvas.toDataURL());
+        return workingCanvas.toDataURL();
+    }
 
     //
     // Launch app !
