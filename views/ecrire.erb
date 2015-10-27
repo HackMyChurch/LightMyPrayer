@@ -124,14 +124,7 @@
         window.clearInterval(intervalID);
         firstDotOnCanvas = true;
         clearLog();
-
-/* TODO
- - Voir comment poster un formulaire JSON
-*/
-        // Posting images
-        //var data = new FormData();
-        // data.append('sessionId', sessionId);
-        // data.append('movie', movie);
+        // Posting data
         var postData = {'sessionId': sessionId, 'movie' : JSON.stringify(movie) };
         $.post(APP_PATH + '/upload',
             postData,
@@ -143,60 +136,6 @@
                 {
                     console.log(errorThrown);
                 });
-/*
-        $.ajax({
-            url: APP_PATH + '/upload?sessionId=' + sessionId, 
-            type: 'POST',
-            data: postData,
-            // cache: false,
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            // processData: false,
-            success : function(response){
-                // Refresh the thumbnail on list
-                document.getElementById("debug").insertAdjacentHTML('beforeEnd', response);
-             },
-            error : function(response){
-                console.log(response);
-             }
-        });
-        // End posting 
-*/
-/*
-        for (var i=0; i<movie.length;i++) {
-            if (movie[i]) {
-                totalDuration+=movie[i].duration;
-                totalImagesLength += movie[i].image.length;
-                log("frame #" + i + ", duration="+ movie[i].duration+", ", 'beforeEnd');
-                log("<img src='" + movie[i].image + "' width='200' />", 'beforeEnd');
-                // log("<img src='" + convertToGrayScale(movie[i].image) + "' width='200' />", 'beforeEnd');
-                // // Posting images
-                // var data = new FormData();
-                // data.append('name', sessionId + "-" + i + ".png");
-                // data.append('duration', movie[i].duration);
-                // data.append('image', movie[i].image);
-                // $.ajax({
-                //     url: APP_PATH + '/upload', 
-                //     type: 'POST',
-                //     data: data,
-                //     cache: false,
-                //     contentType: false, 
-                //     processData: false,
-                //     success : function(response){
-                //         // Refresh the thumbnail on list
-                //         document.getElementById("debug").insertAdjacentHTML('beforeEnd', ".");
-                //      },
-                //     error : function(response){
-                //         console.log(response);
-                //      }
-                // });
-                // // End posting 
-            }
-        }
-        log("Taille totale : "+eval(totalImagesLength/1000)+" Ko.");
-        log("Durée totale : "+eval(totalDuration/1000)+" sec.");
-        log( movie.length + " frames générées.");
-*/
     }
 
     function resetMovie(){

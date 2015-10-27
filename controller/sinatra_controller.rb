@@ -69,7 +69,7 @@ class SinatraApp < Sinatra::Base
             f.write uri.data 
           end
         }
-        
+        # TODO : Doing a movie with images !
          {'result' => 'Ok'}.to_json
       rescue Exception => e
         puts "#{e.message}"
