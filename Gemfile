@@ -10,6 +10,7 @@ gem 'rake'
 gem 'rest-client'
 gem 'sinatra'
 gem 'data_uri'
+#gem  'rmagick'
 # gem 'mini_magick'
 
 group :development do

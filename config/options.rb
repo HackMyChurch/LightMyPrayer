@@ -21,3 +21,6 @@ DELETED_PATH = APP_ROOT + '/content/deleted'
 
 # Répertoire des animations déjà diffusées
 DONE_PATH = APP_ROOT + '/content/done'
+
+#FrameRate pour les vidéos
+FRAME_RATE = 15
