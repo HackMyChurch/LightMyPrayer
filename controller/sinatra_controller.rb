@@ -26,6 +26,7 @@ class SinatraApp < Sinatra::Base
   end
 
   before do
+        @sessionId = params['sessionId'] 
   end
 
   #
@@ -34,7 +35,7 @@ class SinatraApp < Sinatra::Base
 
   # Client pour écrire l'intention
   get APP_PATH + '/' do
-    erb :ecrire
+    redirect APP_PATH + '/ecrire'
   end
 
   # Client pour écrire l'intention
@@ -57,25 +58,24 @@ class SinatraApp < Sinatra::Base
 
   # Posting image in Base64 mode.
   post APP_PATH + '/upload' do  
-    if params['session'] 
-      # begin
-      #   uri = URI::Data.new params['thumb']
-      #   # Writing thumbnail
-      #   File.open("#{APP_ROOT}/public/pictures/#{params['labelthumb']}", 'wb') do |f|
-      #     f.write uri.data 
-      #   end
-      #   # Writing picture
-      #   File.open("#{APP_ROOT}/public/pictures/#{params['label']}", 'wb') do |f|
-      #     f.write (params['picture'][:tempfile].read)
-      #   end
-      #   # Updating db.
-      #   DB.update_item_image_link @code, params['label']
-      #   {'result' => 'Ok'}.to_json
-      # rescue Exception => e
-      #   puts "#{e.message}"
-      #   e.backtrace[0..10].each { |t| puts "#{t}"}
-      #   {'result' => 'Error', "message" => e.message }.to_json
-      # end
+    if  params['movie'] && @sessionId 
+      begin
+        movie =  JSON.parse params['movie'], :symbolize_names => true 
+        movie.each_with_index { |elm, key| 
+          puts "##{key}, img lg :#{elm[:image].length}, duration : #{elm[:duration]}"
+          uri = URI::Data.new elm[:image]
+          # Writing thumbnail
+          File.open("#{UPLOAD_PATH}/#{@sessionId}-#{key}.png", 'wb') do |f|
+            f.write uri.data 
+          end
+        }
+        
+         {'result' => 'Ok'}.to_json
+      rescue Exception => e
+        puts "#{e.message}"
+        e.backtrace[0..10].each { |t| puts "#{t}"}
+        {'result' => 'Error', "message" => e.message }.to_json
+      end
     end
   end
 
