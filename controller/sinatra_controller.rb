@@ -71,18 +71,23 @@ class SinatraApp < Sinatra::Base
             f.write uri.data 
           end
         }
+
+        # Génération de la vidéo
         begin
-          # Génération de la vidéo
           video_file = "#{READY_PATH}/#{@sessionId}.avi"
           File.unlink video_file if File.exist? video_file
 
           ffmpeg_cmd = "ffmpeg -f image2 -framerate #{FRAME_RATE} -pattern_type sequence -r #{FRAME_RATE} -i #{UPLOAD_PATH}/#{@sessionId}-%04d.jpg -s 720x480 #{READY_PATH}/#{@sessionId}.avi"
           puts "#{ffmpeg_cmd}"
-          ret = system(ffmpeg_cmd)
-        rescue
+          ret = system ffmpeg_cmd
+        rescue 
           puts "Erreur ! La vidéo n'a pas été générée !"
           puts "#{ret}"
         end
+
+        # Nettoyage repertoire d'upload
+        system "rm -f #{UPLOAD_PATH}/#{@sessionId}-*.jpg"
+
         # Ici tout va bien !
         {'result' => 'Intention envoyée...'}.to_json
       rescue Exception => e

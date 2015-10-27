@@ -44,6 +44,7 @@
 
 <script type="text/javascript">
     var sessionId = "client1";
+    var imageType = "jpeg";
     var debug_mode = true;
     var frameInterval = 67; // 40 milliseconds for 25 frames/sec
     var mycanvas = document.getElementById("mycanvas");
@@ -83,7 +84,7 @@
     }
 
     function recordFrame() {
-            var dataurl = mycanvas.toDataURL("image/jpeg");
+            var dataurl = mycanvas.toDataURL("image/" + imageType);
             var frame = {
                 'image' : null,
                 'duration' : frameInterval
