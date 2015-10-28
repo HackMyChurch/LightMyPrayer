@@ -2,6 +2,7 @@
 require 'sinatra/reloader' if ENV['RACK_ENV'] == 'development'
 require 'socket'
 require 'data_uri'
+require 'securerandom'
 
 # Application Sinatra servant de base
 class SinatraApp < Sinatra::Base
@@ -55,6 +56,13 @@ class SinatraApp < Sinatra::Base
   #
   # API
   #
+
+  # Generate a session id
+  get APP_PATH + '/session_id' do
+    s = SecureRandom.hex 4
+    puts "New session id : #{s}"
+    {'sessionId' => s}.to_json 
+  end
 
   # Posting image in Base64 mode.
   post APP_PATH + '/upload' do  

@@ -34,7 +34,7 @@
 
 <div class="container">
     <div class="lead">
-        <a class="btn" href="javascript:resetMovie();">Recommencer</a>
+        <a class="btn" href="javascript:initMovie();">Recommencer</a>
         <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
     </div>
 <canvas id="mycanvas" width="800" height="600">
@@ -58,6 +58,17 @@
     var durationFactor = 1;
     var firstDotOnCanvas = true;
     var dataurl_prec = null;
+
+    function setSessionId() {
+        $.get( APP_PATH + "/session_id", function( data ) {
+            jsondata = JSON.parse(data);
+            sessionId = jsondata.sessionId;
+            console.log( "sessionId=" + sessionId );
+        }) 
+        .fail(function() {
+            alert( "Impossible de récupérer un identifiant de session ! Vérifiez la connexion au réseau..." );
+        });
+    }
 
     function initCanvas(){ 
         if(mycanvas && mycanvas.getContext) {
@@ -120,11 +131,28 @@
           mycanvas.removeEventListener("mousemove",onMouseMove,false);
     }
 
+    function isNotNull(value) {
+      return value != null;
+    }
+
     function sendMovie() {
         var totalDuration, totalImagesLength = 0;
         window.clearInterval(intervalID);
         firstDotOnCanvas = true;
         clearLog();
+        // filtering, to send clean data
+        movie = movie.filter(isNotNull);
+
+        console.log(movie);
+//   $.ajax({
+//   type: "POST",
+//   url: APP_PATH + '/upload',
+//   data: {'sessionId': sessionId, 'movie' : JSON.stringify(movie) }
+// })
+//   .fail(function( msg ) {
+//     console.log( msg );
+//   });
+
         // Posting data
         var postData = {'sessionId': sessionId, 'movie' : JSON.stringify(movie) };
         $.post(APP_PATH + '/upload',
@@ -139,7 +167,8 @@
                 });
     }
 
-    function resetMovie(){
+    function initMovie(){
+        setSessionId();
         movie = new Array();
         movieIndex = 0;
         durationFactor = 1;
@@ -181,7 +210,7 @@
     //
     // Launch app !
     //
-    initCanvas();
+    initMovie();
     mycanvas.onmousedown = function(evt) {
         if (firstDotOnCanvas) {
             // Start recording generated frames
