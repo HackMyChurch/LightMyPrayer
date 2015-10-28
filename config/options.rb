@@ -19,6 +19,9 @@ READY_PATH = APP_ROOT + '/content/ready'
 # Répertoire des animations supprimées par modération
 DELETED_PATH = APP_ROOT + '/content/deleted'
 
+# Répertoire de toutes les dernières image des video
+MODERATION_PATH = APP_ROOT + '/content/moderation'
+
 # Répertoire des animations déjà diffusées
 DONE_PATH = APP_ROOT + '/content/done'
 
