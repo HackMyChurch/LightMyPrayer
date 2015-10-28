@@ -2,7 +2,6 @@
 require 'sinatra/reloader' if ENV['RACK_ENV'] == 'development'
 require 'socket'
 require 'data_uri'
-require 'securerandom'
 
 # Application Sinatra servant de base
 class SinatraApp < Sinatra::Base
@@ -66,33 +65,14 @@ class SinatraApp < Sinatra::Base
   post APP_PATH + '/upload' do  
     if  params['movie'] && @sessionId 
       begin
-        movie =  JSON.parse params['movie'], :symbolize_names => true 
-        movie.each_with_index { |elm, key| 
-          puts "##{key}, img lg :#{elm[:image].length}, duration : #{elm[:duration]}"
-          uri = URI::Data.new elm[:image]
-          image_file = "#{UPLOAD_PATH}/#{@sessionId}-"+key.to_s.rjust(4, "0")+".jpg"
-          File.unlink image_file if File.exist? image_file
-          # Writing image
-          File.open(image_file, 'wb') do |f|
-            f.write uri.data 
-          end
-        }
+        movie = JSON.parse params['movie'], :symbolize_names => true
+        Helper::Files::write_images(movie, @sessionId)
 
         # Génération de la vidéo
-        begin
-          video_file = "#{READY_PATH}/#{@sessionId}.avi"
-          File.unlink video_file if File.exist? video_file
-
-          ffmpeg_cmd = "ffmpeg -f image2 -framerate #{FRAME_RATE} -pattern_type sequence -r #{FRAME_RATE} -i #{UPLOAD_PATH}/#{@sessionId}-%04d.jpg -s 720x480 #{READY_PATH}/#{@sessionId}.avi"
-          puts "#{ffmpeg_cmd}"
-          ret = system ffmpeg_cmd
-        rescue 
-          puts "Erreur ! La vidéo n'a pas été générée !"
-          puts "#{ret}"
-        end
+        Helper::Video::generate_video @sessionId
 
         # Nettoyage repertoire d'upload
-        system "rm -f #{UPLOAD_PATH}/#{@sessionId}-*.jpg"
+        Helper::Files::cleanup_working_dir @sessionId
 
         # Ici tout va bien !
         {'result' => 'Intention envoyée...'}.to_json

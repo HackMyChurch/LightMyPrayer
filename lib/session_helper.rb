@@ -1,4 +1,5 @@
 # coding: utf-8
+require 'securerandom'
 
 # Librairies pour l'application
 module Helper
