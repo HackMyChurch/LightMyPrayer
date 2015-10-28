@@ -16,5 +16,8 @@ end
 puts '----------> configs <----------'
 require __dir__('config/options')
 
-puts '----------> controllers <------'
+puts '-------> Libs & Helpers <------'
+require __dir__('lib/init')
+
+puts '--------> controllers <--------'
 require __dir__('controller/init')

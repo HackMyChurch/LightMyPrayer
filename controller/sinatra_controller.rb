@@ -59,9 +59,7 @@ class SinatraApp < Sinatra::Base
 
   # Generate a session id
   get APP_PATH + '/session_id' do
-    s = SecureRandom.hex 4
-    puts "New session id : #{s}"
-    {'sessionId' => s}.to_json 
+    Helper::Session::generate_session_id
   end
 
   # Posting image in Base64 mode.
