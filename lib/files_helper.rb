@@ -10,18 +10,29 @@ module Helper
     def write_images(movie, session_id)
       image_name = ""
       uri = nil
-      movie.each_with_index { |elm, key| 
-        puts "##{key}, img lg :#{elm[:image].length}, duration : #{elm[:duration]}"
+      image_index = 0;
+      frame_duration = 1000/FRAME_RATE
+      log = ""
+      movie.each { |elm| 
         uri = URI::Data.new elm[:image]
-        image_name = "#{session_id}-"+key.to_s.rjust(4, "0")+".jpg"
-        image_file = "#{UPLOAD_PATH}/#{image_name}"
-        File.unlink image_file if File.exist? image_file
-        # Writing image
-        File.open(image_file, 'wb') do |f|
-          f.write uri.data 
+        # Adjust duration
+        log = "##{image_index}, img lg :#{elm[:image].length}, duration : #{elm[:duration]} "
+        duration = elm[:duration]
+        while  duration >= frame_duration
+          log += "."
+          write_file UPLOAD_PATH, image_index, session_id, uri
+          duration -= frame_duration
+          image_index = image_index + 1
         end
+        puts log
         }
-        keep_last_image_for_moderation image_name, uri
+        # keep last image for moderation purpose
+        write_file MODERATION_PATH, image_index, session_id, uri
+        # Adds 5 seconds of final image.
+        (FRAME_RATE * TIME_KEEPING_FINAL_STATE).to_i.times {
+          write_file UPLOAD_PATH, image_index, session_id, uri
+          image_index = image_index + 1
+        }
     end
 
     # cleaning up working directory : deleting images files for a specific sessionId
@@ -30,11 +41,14 @@ module Helper
       system "rm -f #{UPLOAD_PATH}/#{session_id}-*.jpg"
     end
 
-    # Puts the last image in moderation directory
-    def keep_last_image_for_moderation(name, uri)
-      File.open("#{MODERATION_PATH}/#{name}", 'wb') do |f|
+    # Writing image file
+    def write_file(dir_path, image_index, session_id, uri)
+      image_name = "#{session_id}-"+image_index.to_s.rjust(4, "0")+".jpg"
+      image_file = File.join(dir_path, image_name)
+      File.unlink image_file if File.exist? image_file
+      File.open(image_file, 'wb') do |f|
         f.write uri.data 
-      end
+      end      
     end
 
   end

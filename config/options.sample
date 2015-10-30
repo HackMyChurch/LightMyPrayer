@@ -27,3 +27,6 @@ DONE_PATH = APP_ROOT + '/content/done'
 
 #FrameRate pour les vidéos
 FRAME_RATE = 15
+
+# Temps d'affichage de la dernière image de la vidéo (en secondes)
+TIME_KEEPING_FINAL_STATE = 5
