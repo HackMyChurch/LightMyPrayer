@@ -75,7 +75,7 @@
             context = mycanvas.getContext("2d");
             // background
             context.fillStyle = 'rgb(0,0,0)';
-            context.fillRect(0,0,800,600);
+            context.fillRect( 0, 0, 800, 600); //window.innerWidth, window.innerHeight );
         }
         context.strokeStyle = "white";
         context.lineWidth = defaultLineWidth;
@@ -143,16 +143,6 @@
         // filtering, to send clean data
         movie = movie.filter(isNotNull);
 
-        console.log(movie);
-//   $.ajax({
-//   type: "POST",
-//   url: APP_PATH + '/upload',
-//   data: {'sessionId': sessionId, 'movie' : JSON.stringify(movie) }
-// })
-//   .fail(function( msg ) {
-//     console.log( msg );
-//   });
-
         // Posting data
         var postData = {'sessionId': sessionId, 'movie' : JSON.stringify(movie) };
         $.post(APP_PATH + '/upload',
@@ -175,6 +165,7 @@
         window.clearInterval(intervalID);
         firstDotOnCanvas = true;
         dataurl_prec = null;
+        // resizeCanvas();
         initCanvas();
         clearLog();
     }
@@ -207,6 +198,11 @@
     //     return workingCanvas.toDataURL();
     // }
 
+    // function resizeCanvas() {
+    //     mycanvas.width = window.innerWidth;
+    //     mycanvas.height = window.innerHeight;
+    // }
+
     //
     // Launch app !
     //
@@ -225,6 +221,9 @@
         mycanvas.addEventListener("mousemove",onMouseMove,false);
         mycanvas.addEventListener("mouseup",onMouseUp,false);
     }
+
+    // // resize the canvas to fill browser window dynamically
+    // window.addEventListener('resize', resizeCanvas, false);
 
 
 </script>
