@@ -21,21 +21,21 @@ Le dispositif est constitué de :
 
 ## Électronique
 
-![Schema Arduino](/Arduino/Schema.png?raw=true "Schema Arduino")
+![Schema Arduino](/docs/prototype/Arduino/Schema.png?raw=true "Schema Arduino")
 
-![Schema Arduino Zoom](/Arduino/Schema-Zoom.png?raw=true "Schema Arduino Zoom")
+![Schema Arduino Zoom](/docs/prototype/Arduino/Schema-Zoom.png?raw=true "Schema Arduino Zoom")
 
 ## Photos
 
-![Light My Prayer](/Photos/LightMyPrayer1.jpg?raw=true)
+![Light My Prayer](/docs/prototype/Photos/LightMyPrayer1.jpg?raw=true)
 
-![Light My Prayer](/Photos/LightMyPrayer2.jpg?raw=true)
+![Light My Prayer](/docs/prototype/Photos/LightMyPrayer2.jpg?raw=true)
 
 La signalétique d'utilisation a été placée par dessus la structure en impression vinyle.
 
-![Light My Prayer](/Photos/LightMyPrayer3.jpg?raw=true)
+![Light My Prayer](/docs/prototype/Photos/LightMyPrayer3.jpg?raw=true)
 
-![Light My Prayer](/Photos/LightMyPrayer4.jpg?raw=true)
+![Light My Prayer](/docs/prototype/Photos/LightMyPrayer4.jpg?raw=true)
 
-![Light My Prayer](/Photos/LightMyPrayer5.jpg?raw=true)
+![Light My Prayer](/docs/prototype/Photos/LightMyPrayer5.jpg?raw=true)
 
