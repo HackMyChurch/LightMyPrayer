@@ -39,16 +39,17 @@ class SinatraApp < Sinatra::Base
   end
 
   # Client pour écrire l'intention
-  get APP_PATH + '/ecrire' do
+  get APP_PATH + '/ecrire/?' do
     erb :ecrire
   end
 
   # Interface de modération
-  get APP_PATH + '/admin' do
+  get APP_PATH + '/admin/?' do
+    @moderation_list = Dir.glob("#{MODERATION_PATH}/*.jpg")
     erb :admin
   end
 
-  get APP_PATH + '/diffusion' do
+  get APP_PATH + '/diffusion/?' do
     erb :diffusion 
   end
 
@@ -82,6 +83,11 @@ class SinatraApp < Sinatra::Base
         {'result' => 'Error', "message" => e.message }.to_json
       end
     end
+  end
+
+  # List of content to be moderated
+  get APP_PATH + '/moderation_list' do  
+    Dir["#{MODERATION_PATH}/*.jpg"].to_json
   end
 
 end

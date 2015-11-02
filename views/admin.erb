@@ -1,4 +1,14 @@
-<pre>
-	Admin Page
-	- La dernière image de tout ce qui a été généré et pas encore modéré (pas mis dans ./deleted/ )
-</pre>
+<style>
+	div.img {
+		float:left;
+	}
+	img.vignette {
+		width:200px;
+		margin:5px;
+	}
+</style>
+<% @moderation_list.each { |f|  %>
+	<div class="img">
+		<img src="<%=APP_PATH %>/moderation/<%= "#{File.basename(f)}" %>" class="vignette"/>
+	</div>
+<% } %>

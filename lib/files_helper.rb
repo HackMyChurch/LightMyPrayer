@@ -46,10 +46,10 @@ module Helper
       image_name = "#{session_id}-"+image_index.to_s.rjust(4, "0")+".jpg"
       image_file = File.join(dir_path, image_name)
       File.unlink image_file if File.exist? image_file
+      # Writing file
       File.open(image_file, 'wb') do |f|
         f.write uri.data 
-      end      
+      end     
     end
-
   end
 end
