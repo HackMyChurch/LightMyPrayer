@@ -16,7 +16,7 @@ map APP_PATH + "/diffusion" do
 end
 
 use Rack::Rewrite do
-  # rewrite %r{/.*/(css)/(.*)}, '/$1/$2'
+  rewrite %r{/.*/(images)/(.*)}, '/$1/$2'
   rewrite %r{/.*/(js)/(.*)}, '/$1/$2'
 end   
 

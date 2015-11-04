@@ -1,6 +1,8 @@
     <style type="text/css">
         html {
             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+            width: 100%;
+            height: 100%; 
         }
         pre {
             font-size:8px;
@@ -8,18 +10,13 @@
         .lead{
             margin: 10px 0px 10px 0px;
         }
-        canvas, #debug{
-            border:1px #e1e1e1 solid;
-            box-shadow: 0px 0px 12px 2px #e1e1e1;
-            cursor: default !important;
-            float:left;
+
+        #sketch {
+            height: 100%;
         }
-        #debug {
-            margin-left:20px;
-            /*width: 250px;*/
-            height: 600px;
-            overflow: scroll;
-            color:gray;
+
+        canvas {
+            cursor: default !important;
         }
 
         .btn {
@@ -33,113 +30,128 @@
 
 
 <div class="container">
-    <div class="lead">
-        <a class="btn" href="javascript:initMovie();">Recommencer</a>
-        <a class="btn" href="javascript:sendMovie();">J'ai fini !</a>
+    <div id="lead">
+        <a class="btn" id="initBtn" href="#">Recommencer</a>
+        <a class="btn" id="sendBtn" href="#">J'ai fini !</a>
     </div>
-<canvas id="mycanvas" width="800" height="600">
-    Ce navigateur ne supporte pas les canvas HTML5. Essayez plutôt avec Chrome, Firefox, Safari, Opera ou Internet Explorer.
-</canvas>
-<div id="debug"></div>
+    <div id="sketch">
+        <canvas id="mycanvas" moz-opaque>
+            Ce navigateur ne supporte pas les canvas HTML5. Essayez plutôt avec Chrome, Firefox, Safari, Opera ou Internet Explorer.
+        </canvas>
+    </div>
 
 <script type="text/javascript">
-    var sessionId = "client1";
+(function() {
+    //
+    // based on http://www.tricedesigns.com/2012/01/04/sketching-with-html5-canvas-and-brush-images/
+    //
+    // DOM Elements
+    var canvas = document.querySelector('#mycanvas');
+    var sketch = document.querySelector('#sketch');
+    var sketch_style = getComputedStyle(sketch);
+    var btndiv = document.querySelector('#lead');
+    var btndiv_style = getComputedStyle(btndiv);
+    var initBtn = document.querySelector('#initBtn');
+    var sendBtn = document.querySelector('#sendBtn');
+
+    // Working variables
+    var sessionId = "client1"; // The session_id is given by the server with an ajax request.
     var imageType = "jpeg";
-    var debug_mode = true;
+    var interval_timeout = null;
+    var firstDotOnCanvas = true;
     var frameInterval = 67; // 40 milliseconds for 25 frames/sec
-    var mycanvas = document.getElementById("mycanvas");
-    var context = null;
-    var x,y = 0;
-    var defaultLineWidth = 10;
-    var eraserLineWidth = 30;
-    var intervalID = null;
-    var movie = new Array();
+    var movie = new Array(); // data structure to store images and durations
     var movieIndex = -1;
     var durationFactor = 1;
-    var firstDotOnCanvas = true;
     var dataurl_prec = null;
 
+    // Brush
+    var img = new Image();
+    img.src = APP_PATH + '/images/brush2.png';
+
+    // Canvas
+    var ctx = canvas.getContext('2d');
+
+    var isDrawing, lastPoint;
+
+    // Init canvas
+    function initCanvas(){
+        canvas.width = parseInt(sketch_style.getPropertyValue('width')) - 10;
+        canvas.height = window.innerHeight - 2 * parseInt(btndiv_style.getPropertyValue('height'));
+        // Line type
+        ctx.lineJoin = ctx.lineCap = 'round';
+        // background
+        ctx.fillStyle = 'rgb(0,0,0)';
+        ctx.fillRect( 0, 0, canvas.width, canvas.height);
+    }
+
+    // Calculate distance between the two last points
+    function distanceBetween(point1, point2) {
+      return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+    }
+
+    // Calculate angle between two points
+    function angleBetween(point1, point2) {
+      return Math.atan2( point2.x - point1.x, point2.y - point1.y );
+    }
+
+    // Get session_id from server.
     function setSessionId() {
         $.get( APP_PATH + "/session_id", function( data ) {
             jsondata = JSON.parse(data);
             sessionId = jsondata.sessionId;
-            console.log( "sessionId=" + sessionId );
+            console.log( "got sessionId #" + sessionId );
         }) 
         .fail(function() {
             alert( "Impossible de récupérer un identifiant de session ! Vérifiez la connexion au réseau..." );
         });
     }
 
-    function initCanvas(){ 
-        if(mycanvas && mycanvas.getContext) {
-            context = mycanvas.getContext("2d");
-            // background
-            context.fillStyle = 'rgb(0,0,0)';
-            context.fillRect( 0, 0, 800, 600); //window.innerWidth, window.innerHeight );
-        }
-        context.strokeStyle = "white";
-        context.lineWidth = defaultLineWidth;
-        context.lineCap = "round";
-        context.lineJoin = "round";
+    // initializing movie structure
+    function initMovie(){
+        setSessionId();
+        movie = new Array();
+        movieIndex = 0;
+        durationFactor = 1;
+        window.clearInterval(interval_timeout);
+        firstDotOnCanvas = true;
+        dataurl_prec = null;
+        initCanvas();
     }
 
-    function log(s, m) {
-        if (debug_mode) {
-            m = (m == undefined) ? 'afterBegin' : m;
-            document.getElementById("debug").insertAdjacentHTML(m, s + "<br/>");
-        }
-    }
-
-    function clearLog(){
-        document.getElementById("debug").innerHTML = "";
-    }
-
+    // Recording canvas as base64 coded images
+    // debouncing same images : just increase duration
     function recordFrame() {
-            var dataurl = mycanvas.toDataURL("image/" + imageType);
-            var frame = {
-                'image' : null,
-                'duration' : frameInterval
-            };
+        var dataurl = canvas.toDataURL("image/" + imageType);
+        var frame = {
+            'image' : null,
+            'duration' : frameInterval
+        };
 
-            if (dataurl_prec != dataurl) {
-                movieIndex++;
-                durationFactor = 1;
-                dataurl_prec = dataurl;
-                // log('new frame #'+movieIndex);
-            } else {
-                durationFactor++;
-                // log('same frame, duration='+eval(durationFactor * frameInterval));
-            }
-            frame.image = dataurl;
-            frame.duration = durationFactor * frameInterval;
-            movie[movieIndex] = frame;
-    }
-
-    function onMouseMove(evt) {
-        if(context) {
-            context.beginPath();
-            context.moveTo(x,y);
-            x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
-            y = evt.offsetY ? evt.offsetY : (evt.pageY - evt.target.offsetTop);
-            context.lineTo(x,y);
-            context.stroke();
-            context.closePath();
-            document.getElementById("mycanvas").style.cursor = 'default !important';            
+        if (dataurl_prec != dataurl) {
+            movieIndex++;
+            durationFactor = 1;
+            dataurl_prec = dataurl;
+            //console.log('new frame #'+movieIndex);
+        } else {
+            durationFactor++;
+            //console.log('same frame, duration='+eval(durationFactor * frameInterval));
         }
-    }
-    function onMouseUp(evt) {
-          mycanvas.removeEventListener("mousemove",onMouseMove,false);
+        frame.image = dataurl;
+        frame.duration = durationFactor * frameInterval;
+        movie[movieIndex] = frame;
     }
 
+    // Return true is value is null.
     function isNotNull(value) {
       return value != null;
     }
 
+    // Posting data to the server
     function sendMovie() {
         var totalDuration, totalImagesLength = 0;
-        window.clearInterval(intervalID);
+        window.clearInterval(interval_timeout);
         firstDotOnCanvas = true;
-        clearLog();
         // filtering, to send clean data
         movie = movie.filter(isNotNull);
 
@@ -157,74 +169,52 @@
                 });
     }
 
-    function initMovie(){
-        setSessionId();
-        movie = new Array();
-        movieIndex = 0;
-        durationFactor = 1;
-        window.clearInterval(intervalID);
-        firstDotOnCanvas = true;
-        dataurl_prec = null;
-        // resizeCanvas();
-        initCanvas();
-        clearLog();
-    }
-
-    // function convertToGrayScale(img) {
-    //     console.log(img);
-    //     console.log(img.src);
-    //     // img.src = context.getImageData( 0, 0, mycanvas.width, mycanvas.height );
-    //     var workingCanvas = document.createElement( 'canvas' );
-    //     var workingContext = workingCanvas.getContext( '2d' );
-
-    //     workingContext.drawImage( img, 0, 0 );
-    //     var pixels = workingContext.getImageData( 0, 0, mycanvas.width, mycanvas.height );
-    //     for( var y = 0; y < pixels.height; y++ ) {
-    //         for( var x = 0; x < pixels.width; x++ ) {
-    //             var i = ( y * 4 ) * pixels.width + x * 4;
-    //             var avg = ( 
-    //                 pixels.data[i] 
-    //               + pixels.data[i + 1] 
-    //               + pixels.data[i + 2] 
-    //             ) / 3;
-    //             pixels.data[i] = avg;
-    //             pixels.data[i + 1] = avg;
-    //             pixels.data[i + 2] = avg;
-    //         };
-    //     };
-    //     console.log(pixels);
-    //     workingContext.putImageData( pixels, 0, 0, 0, 0, pixels.width, pixels.height );
-    //     console.log(workingCanvas.toDataURL());
-    //     return workingCanvas.toDataURL();
-    // }
-
-    // function resizeCanvas() {
-    //     mycanvas.width = window.innerWidth;
-    //     mycanvas.height = window.innerHeight;
-    // }
-
     //
-    // Launch app !
+    // Binding mouse Events
     //
-    initMovie();
-    mycanvas.onmousedown = function(evt) {
+    canvas.onmousedown = function(e) {
         if (firstDotOnCanvas) {
             // Start recording generated frames
-            intervalID = window.setInterval(recordFrame, frameInterval);
+            interval_timeout = window.setInterval(recordFrame, frameInterval);
             firstDotOnCanvas = false;
         }
-        mycanvas.style.cursor = 'default';
-        if(evt.which == 3) return;
-        x = evt.offsetX ? evt.offsetX : (evt.pageX - evt.target.offsetLeft);
-        y = evt.offsetY ? evt.offsetY : (evt.pageY - evt.target.offsetTop);
-        // do not register if right mouse button is pressed.
-        mycanvas.addEventListener("mousemove",onMouseMove,false);
-        mycanvas.addEventListener("mouseup",onMouseUp,false);
+        isDrawing = true;
+        lastPoint = { x: e.clientX, y: e.clientY };
+    };
+
+    canvas.onmousemove = function(e) {
+      if (!isDrawing) return;
+      
+      var currentPoint = { x: e.clientX, y: e.clientY };
+      var dist = distanceBetween(lastPoint, currentPoint);
+      var angle = angleBetween(lastPoint, currentPoint);
+      
+      for (var i = 0; i < dist; i++) {
+        x = lastPoint.x + (Math.sin(angle) * i) - 25;
+        y = lastPoint.y + (Math.cos(angle) * i) - 25;
+        ctx.drawImage(img, x, y);
+      }
+      
+      lastPoint = currentPoint;
+    };
+
+    canvas.onmouseup = function() {
+      isDrawing = false;
+    };
+
+    //
+    // Binding buttons
+    //
+    initBtn.onclick = function() {
+        initMovie();
+    }
+    sendBtn.onclick = function() {
+        sendMovie();
     }
 
-    // // resize the canvas to fill browser window dynamically
-    // window.addEventListener('resize', resizeCanvas, false);
+    // Starting by initializing app
+    initMovie();
 
-
+}());
 </script>
 </div>
