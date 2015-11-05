@@ -11,12 +11,12 @@ map APP_PATH + "/moderation" do
 end
 
 # map the irectory for diffusion purpose
-map APP_PATH + "/diffusion" do
+map APP_PATH + "/ready" do
     run Rack::Directory.new("./content/ready")
 end
 
 use Rack::Rewrite do
-  rewrite %r{/.*/(images)/(.*)}, '/$1/$2'
+  rewrite %r{/.*/(images|css)/(.*)}, '/$1/$2'
   rewrite %r{/.*/(js)/(.*)}, '/$1/$2'
 end   
 

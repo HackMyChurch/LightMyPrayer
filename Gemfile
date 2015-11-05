@@ -10,7 +10,7 @@ gem 'rake'
 gem 'rest-client'
 gem 'sinatra'
 gem 'data_uri'
-gem 'sidekiq'
+gem 'ruby-processing'
 
 group :development do
   gem 'sinatra-contrib'
