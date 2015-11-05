@@ -12,8 +12,14 @@ module Helper
           File.unlink video_file if File.exist? video_file
 
           ffmpeg_cmd = "ffmpeg -loglevel warning -f image2 -framerate #{FRAME_RATE} -pattern_type sequence -r #{FRAME_RATE} -i #{UPLOAD_PATH}/#{session_id}-%04d.jpg -s 720x480 #{READY_PATH}/#{session_id}.avi"
-          puts "#{ffmpeg_cmd}"
-          ret = system ffmpeg_cmd
+
+          pid = spawn(ffmpeg_cmd)
+          puts "Spawnning (pid=#{pid}), command : #{ffmpeg_cmd}"
+          Process.wait(pid)
+
+          # Nettoyage repertoire d'upload
+          Helper::Files::cleanup_working_dir session_id
+
         rescue 
           puts "Erreur ! La vidéo n'a pas été générée !"
           puts "#{ret}"

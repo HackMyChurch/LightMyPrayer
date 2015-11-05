@@ -72,9 +72,6 @@ class SinatraApp < Sinatra::Base
         # Génération de la vidéo
         Helper::Video::generate_video @sessionId
 
-        # Nettoyage repertoire d'upload
-        Helper::Files::cleanup_working_dir @sessionId
-
         # Ici tout va bien !
         {'result' => 'Intention envoyée...'}.to_json
       rescue Exception => e
