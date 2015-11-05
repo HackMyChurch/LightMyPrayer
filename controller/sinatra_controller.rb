@@ -7,13 +7,14 @@ require 'data_uri'
 class SinatraApp < Sinatra::Base
   configure do
     set :app_file, __FILE__
-    set :port, APP_PORT
-    set :root, APP_ROOT
-    set :public_folder, proc { File.join(root, 'public') }
-    set :inline_templates, true
-    set :protection, true
-    set :lock, true
     set :bind, '0.0.0.0' # allowing acces to the lan
+    set :inline_templates, true
+    set :lock, true
+    set :port, APP_PORT
+    set :protection, true
+    set :public_folder, proc { File.join(root, 'public') }
+    set :root, APP_ROOT
+    set :server, :puma
   end
 
   configure :development do
