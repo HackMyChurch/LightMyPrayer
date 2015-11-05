@@ -16,7 +16,7 @@ module Helper
       movie.each { |elm| 
         uri = URI::Data.new elm[:image]
         # Adjust duration
-        log = "##{image_index}, img lg :#{elm[:image].length}, duration : #{elm[:duration]} "
+        log = "[#{session_id}] : ##{image_index}, img lg :#{elm[:image].length}, duration : #{elm[:duration]} "
         duration = elm[:duration]
         while  duration >= frame_duration
           log += "."
