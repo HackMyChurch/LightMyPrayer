@@ -10,45 +10,78 @@ var debug = true;
 // All Examples Written by Casey Reas and Ben Fry
 // unless otherwise stated.
 int numBalls = 7;
-float spring = 0.005; //0.05;
+float spring = 0.0002; //0.05;
 float gravity = -0.0001; //0.03;
-float maxSpeed = 1.125;
+float maxStartingSpeed = 0.85;
+int boxMinHeight =170;
+int boxMaxHeight =200;
+float avgDisplayTime = 0;
+float MaxAvgDisplayTime = 0;
+int totalNumBalls = 0;
+
 Ball[] balls = new Ball[numBalls];
+
+void addBall(int index) {
+	balls[index] = new Ball(random(width), height, random(boxMinHeight, boxMaxHeight), index, balls);
+    totalNumBalls++;
+}
+
+void display_stats() {
+	var sum = 0;
+	for (int i = 0; i < numBalls; i++) {
+		sum += balls[i].timeElapsed;
+	}
+	avgDisplayTime = sum / numBalls;
+	if (avgDisplayTime > MaxAvgDisplayTime) {
+		MaxAvgDisplayTime = avgDisplayTime;
+	}
+	fill(255);
+	text("Curent Avg time : " + avgDisplayTime.toFixed(2), 50, 50);
+	text("Max Avg time : " + MaxAvgDisplayTime.toFixed(2), 50, 65);
+	text("Total rectangles : " + totalNumBalls, 50, 80);
+}
+
 void setup() 
 {
   size(canvas_width, canvas_height);
   noStroke();
   smooth();
   for (int i = 0; i < numBalls; i++) {
-    balls[i] = new Ball(random(width), height, random(150, 200), i, balls);
+  	addBall(i);
   }
  }
+
 void draw() 
 {
   background(0);
-
   for (int i = 0; i < numBalls; i++) {
   	// If a ball is gone, create a new one
   	if (balls[i].hasGone()) {
-  		balls[i] = new Ball(random(width), height, random(150, 200), i, balls);
+  		addBall(i);
   	}
     balls[i].collide();
     balls[i].move();
     balls[i].display();  
+  }
+  if (debug) {
+  	display_stats();
   }
 }
 
 class Ball {
   float x, y;
   float boxWidth;
-  float vx = random(0, maxSpeed);
-  float vy = random(0, maxSpeed);
+  float boxHeight;
+  float vx = random(0, maxStartingSpeed);
+  float vy = random(0, maxStartingSpeed);
   int id;
   Ball[] others;
   int red;
   int green;
   int blue;
   boolean gone = false;
+  float startedAt = new Date();
+  float timeElapsed = 0;
  
   Ball(float xin, float yin, float din, int idin, Ball[] oin) {
     x = xin;
@@ -67,7 +100,7 @@ class Ball {
       float dx = others[i].x - x;
       float dy = others[i].y - y;
       float distance = sqrt(dx*dx + dy*dy);
-      float minDist = others[i].boxWidth/2 + boxWidth/2;
+      float minDist = others[i].boxWidth/2 + boxWidth/2; // ????? A modifier
       if (distance < minDist) { 
         float angle = atan2(dy, dx);
         float targetX = x + cos(angle) * minDist;
@@ -107,17 +140,22 @@ class Ball {
 
   void display() {
     fill(red, green, blue);
-    // ellipse(x, y, boxWidth, boxWidth);
     rect(x, y, boxWidth, boxHeight);
     fill(0);
     // Debug stuff...
     if (debug) {
+    	balls[id].timeElapsed = (new Date() - balls[id].startedAt) / 1000;
 		pos=y+20;
 	    text("#"+id, x+10, pos); pos +=15;
 		text("x = " + round(balls[id].x), x+10, pos); pos +=15;
 		text("y = " + round(balls[id].y), x+10, pos); pos +=15;
 		text("vx = " + balls[id].vx.toFixed(2), x+10, pos); pos +=15;
 		text("vy = " + balls[id].vy.toFixed(2), x+10, pos); pos +=15;
+  		text('Time Elapsed : ' + timeElapsed.toFixed(2) + ' s.', x+10, pos);
+
+  		pos=y+20;
+  		text("w = " + boxWidth.toFixed(2), x+70, pos); pos +=15;
+  		text("h = " + boxHeight.toFixed(2), x+70, pos); pos +=15;
     }
   }
 
