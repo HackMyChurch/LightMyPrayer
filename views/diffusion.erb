@@ -5,13 +5,14 @@ var sketch = document.querySelector('#sketch');
 var sketch_style = getComputedStyle(sketch);
 var canvas_width = parseInt(sketch_style.getPropertyValue('width')) - 10;
 var canvas_height = window.innerHeight; //- 2 * parseInt(btndiv_style.getPropertyValue('height'));
-
+var debug = true;
 
 // All Examples Written by Casey Reas and Ben Fry
 // unless otherwise stated.
 int numBalls = 7;
-float spring = 0.01; //0.05;
+float spring = 0.005; //0.05;
 float gravity = -0.0001; //0.03;
+float maxSpeed = 1.125;
 Ball[] balls = new Ball[numBalls];
 void setup() 
 {
@@ -19,22 +20,17 @@ void setup()
   noStroke();
   smooth();
   for (int i = 0; i < numBalls; i++) {
-    balls[i] = new Ball(random(width), height, random(100, 200), i, balls);
+    balls[i] = new Ball(random(width), height, random(150, 200), i, balls);
   }
  }
 void draw() 
 {
   background(0);
-  
-
-  if (balls.length < numBalls) {
-  	balls[balls.length] = new Ball(random(width), height, random(100, 200), i, balls);
-  }
 
   for (int i = 0; i < numBalls; i++) {
   	// If a ball is gone, create a new one
   	if (balls[i].hasGone()) {
-  		balls[i] = new Ball(random(width), height, random(100, 200), i, balls);
+  		balls[i] = new Ball(random(width), height, random(150, 200), i, balls);
   	}
     balls[i].collide();
     balls[i].move();
@@ -44,9 +40,9 @@ void draw()
 
 class Ball {
   float x, y;
-  float diameter;
-  float vx = 0;
-  float vy = 0;
+  float boxWidth;
+  float vx = random(0, maxSpeed);
+  float vy = random(0, maxSpeed);
   int id;
   Ball[] others;
   int red;
@@ -57,7 +53,8 @@ class Ball {
   Ball(float xin, float yin, float din, int idin, Ball[] oin) {
     x = xin;
     y = yin;
-    diameter = din;
+    boxWidth = din;
+    boxHeight = 9/16*boxWidth;
     id = idin;
     others = oin;
     red = random(200,255);
@@ -70,7 +67,7 @@ class Ball {
       float dx = others[i].x - x;
       float dy = others[i].y - y;
       float distance = sqrt(dx*dx + dy*dy);
-      float minDist = others[i].diameter/2 + diameter/2;
+      float minDist = others[i].boxWidth/2 + boxWidth/2;
       if (distance < minDist) { 
         float angle = atan2(dy, dx);
         float targetX = x + cos(angle) * minDist;
@@ -86,24 +83,23 @@ class Ball {
   }
   
   void move() {
+  	yOld = y;
     vy += gravity;
     x += vx;
     y += vy;
-    if (x + diameter/2 > width) {
-      x = width - diameter/2;
+    if (x + boxWidth > width) {
+      x = width - boxWidth;
       vx += -0.9; 
     }
-    else if (x - diameter/2 < 0) {
-      x = diameter/2;
+    else if (x < 0) {
+      x = 0;
       vx *= -0.9;
     }
-    if (y + diameter/2 > height) {
-      y = height - diameter/2;
+    if (y + boxHeight > height) {
+      y = height - boxHeight;
       vy *= -0.9; 
     } 
-    else if (y + diameter/2 < 0) {
-      // y = diameter/2;
-      // vy *= -0.9;
+    else if (y + boxHeight < 0) {
       // flaging this ball as gone away
       gone = true;
     }
@@ -111,7 +107,18 @@ class Ball {
 
   void display() {
     fill(red, green, blue);
-    ellipse(x, y, diameter, diameter);
+    // ellipse(x, y, boxWidth, boxWidth);
+    rect(x, y, boxWidth, boxHeight);
+    fill(0);
+    // Debug stuff...
+    if (debug) {
+		pos=y+20;
+	    text("#"+id, x+10, pos); pos +=15;
+		text("x = " + round(balls[id].x), x+10, pos); pos +=15;
+		text("y = " + round(balls[id].y), x+10, pos); pos +=15;
+		text("vx = " + balls[id].vx.toFixed(2), x+10, pos); pos +=15;
+		text("vy = " + balls[id].vy.toFixed(2), x+10, pos); pos +=15;
+    }
   }
 
   boolean hasGone() {
