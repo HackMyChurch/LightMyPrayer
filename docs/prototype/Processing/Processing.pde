@@ -101,7 +101,7 @@ int WIDTH = 800;
 int HEIGHT = 600;
 
 void setup() {
-  size(WIDTH, HEIGHT);
+  size(800, 600);
   background(0);
   smooth();
   frameRate(15);
@@ -312,4 +312,3 @@ void saveAll() {
     startTimerCleaning();
   }
 }
-
