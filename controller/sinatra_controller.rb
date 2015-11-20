@@ -83,6 +83,27 @@ class SinatraApp < Sinatra::Base
     end
   end
 
+  # Posting image in Base64 mode.
+  post APP_PATH + '/image/upload' do  
+    if  params['image'] # && @sessionId 
+      begin
+        
+        puts "Storing iamge #{params['image'][:filename]}..."
+        File.open("#{UPLOAD_PATH}/" + params['image'][:filename], "wb") do |f|
+          f.write(params['image'][:tempfile].read)
+        end 
+        puts "done."
+
+        # Ici tout va bien !
+        {'result' => 'Intention envoyée...'}.to_json
+      rescue Exception => e
+        puts "#{e.message}"
+        e.backtrace[0..10].each { |t| puts "#{t}"}
+        {'result' => 'Error', "message" => e.message }.to_json
+      end
+    end
+  end
+
   # List of content to be moderated
   get APP_PATH + '/moderation_list' do  
     Dir["#{MODERATION_PATH}/*.jpg"].to_json
