@@ -5,9 +5,10 @@ var app             =       express();
 var upload = multer({ dest: images_path});
 
 app.use(multer({ dest: images_path,
-    // rename: function (fieldname, filename) {
-    //     return filename+Date.now();
-    // },
+    rename: function (fieldname, filename, req, res) {
+        console.log('Rename is called');
+        return filename+Date.now();
+    },
     onFileUploadStart: function (file) {
         file.fieldname = file.originalname;
         console.log(file.originalname + ' is starting ...');
