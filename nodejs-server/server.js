@@ -1,14 +1,15 @@
-var images_path     = "./lmp/upload/"
+var images_path     = "./upload/"
 var express         =       require("express");
 var multer          =       require('multer');
 var app             =       express();
-var upload      =   multer({ dest: './uploads/'});
+var upload = multer({ dest: images_path});
 
 app.use(multer({ dest: images_path,
     // rename: function (fieldname, filename) {
     //     return filename+Date.now();
     // },
     onFileUploadStart: function (file) {
+        file.fieldname = file.originalname;
         console.log(file.originalname + ' is starting ...');
     },
     onFileUploadComplete: function (file) {
