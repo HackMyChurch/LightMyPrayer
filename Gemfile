@@ -16,7 +16,7 @@ group :development do
   gem 'sinatra-contrib'
   gem 'shotgun'
   gem 'pry'
-  gem 'logger'
+  gem 'logger', '~>1.2.8.1'
 end
 
 group :development, :test do
